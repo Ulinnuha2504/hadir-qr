@@ -1,0 +1,62 @@
+
+# ==========================================
+# QR REGISTRATION SYSTEM - GITIGNORE
+# PHP Native + MySQL
+# ==========================================
+
+# 1. Konfigurasi sensitif
+/config/config.php
+.env
+.env.*
+!.env.example
+
+# 2. File runtime dan penyimpanan
+/storage/*
+!/storage/index.php
+!/storage/.htaccess
+!/storage/.gitkeep
+
+# 3. Log dan file sementara
+*.log
+*.tmp
+*.temp
+*.cache
+*.bak
+*.backup
+*.swp
+*.swo
+*~
+
+# 4. Database lokal dan backup
+*.sqlite
+*.sqlite3
+*.db
+*.sql.gz
+*.sql.zip
+*.dump
+
+# 5. Dependency lokal
+/vendor/
+/node_modules/
+
+# 6. Konfigurasi editor
+.vscode/
+.idea/
+*.code-workspace
+
+# 7. File sistem operasi
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 8. File pengujian sementara
+/coverage/
+.phpunit.cache/
+.phpunit.result.cache
+
+# 9. File autentikasi dan rahasia
+*.pem
+*.key
+*.p12
+*.pfx
+/auth.json
