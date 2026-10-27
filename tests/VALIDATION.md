@@ -24,7 +24,7 @@ Pengujian dilakukan pada PHP 8.3.6 dan MariaDB 10.11 dengan database khusus perc
 | Arsip acara menutup perubahan tamu dan scanner | Lulus |
 | Penggantian kata sandi sendiri | Lulus |
 | Pembuatan QR dan decode kembali dengan jsQR | Lulus |
-| Tampilan desktop dashboard dan undangan di browser | Diperiksa |
+| Tampilan desktop dashboard dan undangan di browser | Lulus |
 | Unduh PNG dari browser | Berhasil |
 
 ## Batas pemeriksaan
