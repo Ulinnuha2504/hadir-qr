@@ -1,79 +1,143 @@
-# Hadir — Registrasi Acara QR
+# Hadir — Sistem Registrasi Acara Berbasis QR Code
 
-Versi PHP Native + MySQL untuk shared hosting. Desain hijau lembut, responsif, tanpa framework, Composer, Node.js, atau build di server. Semua CSS, JavaScript, ikon, dan pustaka QR disertakan lokal.
+**Hadir** adalah sistem registrasi dan pencatatan kehadiran tamu untuk berbagai acara. Setiap tamu memperoleh QR Code unik yang dapat dipindai oleh petugas menggunakan kamera laptop atau ponsel.
 
-## Mulai
+Aplikasi dibuat dengan **PHP Native dan MySQL/MariaDB**, memiliki tampilan responsif, dan dirancang agar dapat dijalankan pada shared hosting tanpa framework atau proses build di server.
 
-Baca **INSTALL.md** untuk pemasangan melalui cPanel. Unggah isi paket ke document root subdomain, isi `config/config.php`, lalu buka `install.php`. Installer membuat tabel dan satu akun superadmin pilihan Anda. Tidak ada akun/password bawaan.
+## Fitur utama
 
-## Pembagian akses
+- **Multiacara:** mengelola beberapa acara dengan daftar tamu dan akses terpisah.
+- **Tiga peran pengguna:** superadmin, admin acara, dan petugas registrasi.
+- **Undangan QR unik:** membuat QR untuk setiap tamu dan mengunduh undangan sebagai PNG.
+- **Scan melalui browser:** menggunakan kamera laptop atau ponsel, tanpa memasang aplikasi tambahan.
+- **Scan otomatis:** pilihan untuk melanjutkan pemindaian secara berkelanjutan atau menekan tombol lanjut setelah setiap tamu.
+- **Sambutan suara:** browser dapat membacakan “Selamat datang, [nama tamu]” setelah check-in berhasil.
+- **Check-in manual:** mencari tamu dan mencatat kehadirannya ketika kamera tidak tersedia.
+- **Pencegahan kehadiran ganda:** QR yang sudah digunakan tidak dapat mencatat kehadiran lagi.
+- **Impor dan ekspor CSV:** memasukkan daftar tamu serta mengunduh rekap kehadiran.
+- **Ringkasan dan aktivitas:** melihat statistik kehadiran, kedatangan terakhir, serta riwayat aktivitas sesuai hak akses.
 
-| Fitur | Superadmin | Admin / ketua acara | Petugas |
+## Hak akses
+
+| Fitur | Superadmin | Admin acara | Petugas |
 |---|---|---|---|
-| Melihat acara | Semua | Satu acara penugasan | Satu acara penugasan |
+| Melihat acara | Semua acara | Acara penugasan | Acara penugasan |
 | Membuat acara | Ya | Tidak | Tidak |
-| Mengubah detail acara | Semua | Acara sendiri yang aktif | Tidak |
-| Mengarsipkan / mengaktifkan acara | Ya | Tidak | Tidak |
-| Mengelola akun | Semua, kecuali mengubah akun sendiri melalui form tim | Hanya petugas acara sendiri | Tidak |
-| Mengelola tamu, impor CSV | Semua acara aktif | Acara sendiri yang aktif | Tidak |
-| Melihat / mengunduh QR, ekspor CSV | Semua acara | Acara sendiri | Tidak |
-| Mencari tamu, scan, check-in manual | Acara dipilih | Acara sendiri | Acara sendiri |
-| Melihat aktivitas | Semua / filter acara | Acara sendiri | Tidak |
+| Mengubah detail acara | Semua acara | Acara sendiri yang aktif | Tidak |
+| Mengarsipkan atau mengaktifkan acara | Ya | Tidak | Tidak |
+| Mengelola akun | Semua akun lain | Petugas pada acara sendiri | Tidak |
+| Mengelola tamu dan impor CSV | Semua acara aktif | Acara sendiri yang aktif | Tidak |
+| Melihat undangan QR dan ekspor CSV | Semua acara | Acara sendiri | Tidak |
+| Mencari tamu dan melakukan check-in | Acara yang dipilih | Acara sendiri | Acara sendiri |
+| Melihat riwayat aktivitas | Semua atau berdasarkan acara | Acara sendiri | Tidak |
 | Mengganti kata sandi sendiri | Ya | Ya | Ya |
 
-Satu akun admin/petugas ditugaskan ke tepat satu acara. Satu acara dapat memiliki beberapa admin/petugas. Superadmin dapat membuat akun superadmin tambahan. Penonaktifan akun, pergantian peran/penugasan, dan reset kata sandi memutus sesi lama. Akun sendiri tidak dapat dinonaktifkan melalui daftar tim.
+Setiap admin dan petugas ditugaskan ke **satu acara**. Satu acara dapat memiliki beberapa admin dan petugas.
 
 ## Alur penggunaan
 
-1. Superadmin membuat acara.
-2. Superadmin membuat admin dan menugaskannya ke acara tersebut.
-3. Admin membuat petugas serta memasukkan daftar tamu, satu per satu atau CSV.
-4. Buka **Lihat QR → Unduh PNG**, lalu bagikan gambar kepada tamu secara pribadi. Tamu tidak perlu login.
-5. Petugas masuk melalui browser HP/laptop, membuka **Scan QR**, dan mengizinkan kamera.
-6. Saat QR terbaca, hasil tampil. Tekan **Scan tamu berikutnya** untuk melanjutkan.
-7. Jika kamera bermasalah, cari nama di Daftar tamu lalu klik **Check-in**.
-8. Admin mengekspor rekap CSV setelah acara.
+1. Superadmin membuat acara dan akun admin, lalu menugaskan admin ke acara tersebut.
+2. Admin menambahkan petugas dan memasukkan daftar tamu secara manual atau melalui CSV.
+3. Admin membuka **Lihat QR → Unduh PNG**, kemudian membagikan undangan kepada masing-masing tamu.
+4. Petugas masuk ke sistem dan membuka halaman **Scan QR**.
+5. Petugas mengaktifkan kamera serta memilih mode scan otomatis atau manual.
+6. Saat QR valid dipindai, sistem mencatat waktu kehadiran dan petugas yang melakukan check-in.
+7. Setelah acara, admin dapat mengunduh rekap kehadiran dalam format CSV.
 
-## Fitur
+## Teknologi
 
-- Multiacara dengan data dan otorisasi terpisah.
-- QR acak 192-bit untuk setiap tamu; tidak memakai ID berurutan sebagai kode undangan.
-- Validasi acara dan penguncian transaksi database saat check-in. Dua petugas memindai QR sama hanya menghasilkan satu kehadiran.
-- QR dari acara lain / tamu dihapus ditolak. QR lama tetap sama ketika nama/kategori tamu diedit.
-- Pencatatan waktu dan petugas check-in.
-- Daftar tamu dipaginasi 25 baris; pencarian dan filter status di server.
-- CSV UTF-8, pemisah koma, header `nama,kategori`; maksimum 1 MB / 2.000 baris per impor.
-- Impor bersifat penambahan; nama sama tidak dianggap duplikat karena dua orang dapat bernama sama. Jangan impor ulang file yang sama kecuali memang ingin menambah tamu.
-- Kesalahan baris CSV membatalkan seluruh impor tersebut.
-- Undangan PNG dan cetak / simpan PDF melalui browser.
-- Acara diarsipkan tetap dapat dilihat dan diekspor; perubahan tamu dan check-in ditutup.
-- Tamu belum hadir dapat dihapus dari daftar (soft delete); tamu sudah hadir tidak dapat dihapus melalui antarmuka.
-- Riwayat aktivitas, CSRF, prepared statements PDO, password hashing, sesi HttpOnly/SameSite, dan batas percobaan login.
+| Komponen | Teknologi |
+|---|---|
+| Backend | PHP Native |
+| Database | MySQL / MariaDB dengan InnoDB |
+| Frontend | HTML, CSS, dan JavaScript |
+| Pembuatan QR | qrcode 1.5.4 |
+| Pemindaian QR | jsQR 1.4.0 |
+| Suara sambutan | Web Speech API, bergantung pada browser dan perangkat |
 
-## Batasan yang disengaja
+Pustaka QR disertakan dalam project. Instalasi di server tidak memerlukan Composer, Node.js, atau proses build.
 
-- Satu QR mewakili satu tamu, tanpa jumlah rombongan / kursi / sesi acara.
-- QR merupakan bukti undangan yang dapat disalin. Petugas tetap perlu memastikan nama pemegang QR; sistem tidak memverifikasi identitas fisik.
-- Distribusi undangan dilakukan sendiri; tidak mengirim WhatsApp/email otomatis.
-- Tidak ada reset kehadiran atau pemulihan tamu dihapus melalui UI. Data historis dijaga; koreksi oleh pemilik database harus dilakukan hati-hati dan dibackup terlebih dahulu.
-- Tidak ada mode offline. Check-in memerlukan koneksi ke server; jika koneksi putus, sistem tidak menyatakan berhasil sebelum server menyimpan data.
-- Dashboard diperbarui saat halaman dimuat ulang; tidak memakai WebSocket atau polling terus-menerus.
-- Daftar pemilih/pengelolaan acara dibatasi 500 acara terbaru untuk menjaga UI ringan.
-- Gunakan browser modern dengan JavaScript aktif. Kamera fisik serta kompatibilitas hosting Anda tetap perlu dicoba setelah instalasi.
+## Kebutuhan sistem
 
-## Struktur
+- PHP **8.1 atau lebih baru**, dengan ekstensi `pdo_mysql` dan sesi PHP aktif.
+- MySQL 5.7+/8.x atau MariaDB 10.4+ dengan dukungan InnoDB.
+- Apache atau LiteSpeed yang mendukung aturan `.htaccess` pada paket.
+- Browser modern dengan JavaScript aktif.
+- **HTTPS** untuk mengakses kamera, kecuali saat membuka `localhost` pada perangkat yang sama.
+- Folder `storage` dapat ditulis oleh proses PHP.
 
-- `index.php`: pintu masuk dan rute query `?page=...`, tidak memerlukan rewrite.
-- `install.php`: installer pertama; hapus setelah selesai.
-- `app/bootstrap.php`: koneksi, sesi, validasi, otorisasi, check-in.
-- `app/actions.php`: tindakan POST.
-- `app/views.php`: halaman server-rendered.
-- `assets/app.css`, `assets/app.js`: tampilan dan interaksi.
-- `assets/vendor/`: jsQR 1.4.0 dan qrcode 1.5.4 serta lisensi.
-- `database/schema.sql`: tabel InnoDB dan indeks.
-- `config/config.example.php`: contoh konfigurasi tanpa rahasia nyata.
-- `storage/`: log kesalahan privat.
-- `tools/`: pemeriksaan CLI dan pemulihan kata sandi melalui terminal.
-- `tests/VALIDATION.md`: hasil pengujian dan pemeriksaan penerimaan hosting.
+Source yang disiapkan telah diuji menggunakan PHP 8.3 dan MariaDB 10.11. Kamera dan suara perlu diuji pada perangkat yang akan digunakan saat acara.
 
-Tidak menyertakan data percobaan, akun tes, konfigurasi database nyata, atau database dari versi situs sebelumnya. Ini instalasi baru, bukan migrasi otomatis dari versi Cloudflare.
+## Instalasi singkat
+
+1. Buat database dan pengguna MySQL, lalu berikan akses pengguna ke database tersebut.
+2. Unggah dan ekstrak project ke document root domain atau subdomain.
+3. Salin `config/config.example.php` menjadi `config/config.php`.
+4. Isi konfigurasi database dan atur `install_key` dengan kunci acak rahasia minimal 24 karakter.
+5. Buka `install.php` melalui browser dan buat akun superadmin.
+6. Setelah instalasi berhasil, hapus `install.php` dari server.
+
+Tabel dibuat otomatis oleh installer. Tidak ada username atau kata sandi bawaan.
+
+Panduan lengkap pemasangan, pengecekan izin folder, backup, dan pemecahan masalah tersedia dalam **[INSTALL.md](INSTALL.md)**.
+
+## Impor daftar tamu
+
+Gunakan file CSV berformat **UTF-8** dengan pemisah koma dan header berikut:
+
+```csv
+nama,kategori
+Ahmad Fauzi,Umum
+Siti Aminah,VIP
+```
+
+Batas impor adalah **1 MB atau 2.000 baris** per proses. Impor bersifat penambahan: mengimpor file yang sama dua kali akan menambah data kembali. Jika ada baris yang tidak valid, seluruh proses impor dibatalkan.
+
+## Keamanan dan backup
+
+- Akses acara dan tindakan pengguna diperiksa berdasarkan peran serta penugasan acara.
+- Setiap QR menggunakan token acak dan diperiksa terhadap acara yang dipilih.
+- Proses check-in menggunakan transaksi database untuk mencegah pencatatan ganda.
+- Formulir dilindungi CSRF; akses database menggunakan prepared statements; kata sandi disimpan dalam bentuk hash.
+- Sesi menggunakan cookie HttpOnly dan SameSite. Perubahan akses akun memutus sesi lama.
+- Terapkan HTTPS dan pastikan folder privat seperti `config`, `storage`, dan `database` terlindungi dari akses langsung melalui web.
+- Cadangkan **database dan file aplikasi** secara berkala. Ekspor CSV adalah rekap, bukan backup database lengkap.
+- Jangan mengunggah `config/config.php`, log, backup database, atau kredensial ke repository.
+
+QR adalah bukti undangan yang dapat disalin. Petugas tetap perlu memeriksa kesesuaian nama tamu saat registrasi.
+
+## Batasan
+
+- Satu QR berlaku untuk satu tamu; belum ada pengaturan jumlah rombongan, kursi, atau sesi acara.
+- Undangan dibagikan secara manual; sistem belum mengirim WhatsApp atau email otomatis.
+- Check-in membutuhkan koneksi ke server dan belum mendukung mode offline.
+- Dashboard diperbarui saat halaman dimuat ulang.
+- Belum tersedia menu untuk membatalkan kehadiran atau memulihkan tamu yang dihapus.
+- Suara sambutan bergantung pada browser, suara yang tersedia, dan pengaturan audio perangkat; beberapa browser dapat membutuhkan interaksi pengguna terlebih dahulu.
+
+## Struktur project
+
+```text
+hadir-qr/
+├── app/                 # Logika aplikasi dan tampilan
+├── assets/              # CSS, JavaScript, ikon, dan pustaka QR
+├── config/              # Contoh dan konfigurasi aplikasi
+├── database/            # Skema database
+├── storage/             # Log aplikasi
+├── tests/               # Catatan validasi
+├── tools/               # Pemeriksaan dan pemulihan melalui CLI
+├── index.php            # Halaman utama dan routing
+├── install.php          # Installer awal
+├── INSTALL.md           # Panduan instalasi
+└── README.md            # Dokumentasi project
+```
+
+## Pemeriksaan tambahan
+
+Jika tersedia akses Terminal atau SSH, jalankan:
+
+```bash
+php tools/check.php
+```
+
+Perintah tersebut memeriksa konfigurasi dasar dan koneksi database. Rincian hasil pengujian serta daftar pemeriksaan sebelum acara tersedia di **[tests/VALIDATION.md](tests/VALIDATION.md)**.
