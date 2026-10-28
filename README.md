@@ -141,3 +141,11 @@ php tools/check.php
 ```
 
 Perintah tersebut memeriksa konfigurasi dasar dan koneksi database. Rincian hasil pengujian serta daftar pemeriksaan sebelum acara tersedia di **[tests/VALIDATION.md](tests/VALIDATION.md)**.
+
+
+## Lisensi
+
+Project ini menggunakan [MIT License](LICENSE).
+
+Hak cipta © 2026 Muhammad Ulinnuha.
+Lisensi pustaka pihak ketiga tersedia di folder assets/vendor.
